@@ -25,7 +25,7 @@ import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping()
-public class controller {
+public class CommsController {
 
     @Autowired
     UserService userService;
@@ -39,6 +39,18 @@ public class controller {
     @Autowired
     JWTService jwtService;
 
+    /**
+     * I wanted to use the least amount of endpoints in order to make my front-end
+     * work easier.
+     * Using this "comms" entrance I managed to check all comunications between the
+     * front and the backend.
+     * I implemented a logger to keep an eye on any changes and two validators (user
+     * o admin) to check for
+     * authorities in every request.
+     * 
+     * @param requestDTO
+     * @return responseDTO
+     */
     @PostMapping("/comms")
     public ResponseEntity<ResponseDTO> RequesteManager(@Valid @RequestBody RequestDTO requestDTO) {
 
@@ -206,7 +218,6 @@ public class controller {
                     }
                 }
             }
-
             default -> {
                 responseDTO.setStatus("BAD REQUEST. Invalid Area");
             }
@@ -236,10 +247,22 @@ public class controller {
 
     }
 
+    /**
+     * From this point forward I'll only work with "local routes" using thymeleaf to
+     * create the views. These routes are templates with no conection to the front
+     * end and only work using a "key" that is created for each request. Till now I
+     * only made one route "password-recovery" the link to this resource is created
+     * in the authRecovery method of user services and sent in an email (+ key) to
+     * the user email account.
+     * 
+     * @param view
+     * @param key
+     * @return template.
+     */
     @GetMapping("/password-recovery")
     public String getForm(Model view, @RequestParam(name = "key") String key) {
         PasswordRecoveryDTO newPass = PasswordRecoveryDTO.builder()
-                .username(key)
+                .username(this.jwtService.userFromJWT(key))
                 .newPass("")
                 .confirmation("")
                 .build();

@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.rodrigo_luna.plants_and_sensors.dtos.AuthRecoveryDTO;
 import com.rodrigo_luna.plants_and_sensors.dtos.ChangePasswordDTO;
@@ -59,6 +60,8 @@ public class UserService {
                 .build();
         try {
             userRepository.save(userModel);
+            String registrationEmail = "Welcome " + userModel.getUsername() + "! You are now part of this demo site!";
+            mailService.sendEmail(registrationDTO.getEmail(), "Password Recovery - SensorWatch", registrationEmail);
             userModel.setPassword("password");
             response.setStatus("OK");
             response.setPack(userModel);
@@ -191,7 +194,8 @@ public class UserService {
                 throw new BadCredentialsException("Bad Credentials: \n user email: " + user.getEmail()
                         + ". request email: " + recoveryDTO.getEmail());
             }
-            String link = "http://localhost:8080/password-recovery?key=" + jWTService.getToken(user);
+            final String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+            String link = baseUrl + "/password-recovery?key=" + jWTService.getToken(user);
             String recoveryMail = "Hello " + user.getUsername()
                     + "! You recently requested a password recovery with us. If you did not request a password reset, please contact your admin!\nFollow the link to start your recovery process:\n"
                     + link;

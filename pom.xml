@@ -10,9 +10,9 @@
     </parent>
     <groupId>com.rodrigo_luna</groupId>
     <artifactId>plants_and_sensors</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>plants_and_sensors</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Demo site</description>
     <url/>
     <licenses>
         <license/>
