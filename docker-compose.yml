@@ -1,0 +1,12 @@
+version: '2'
+
+services:
+  plants_and_sensors:
+    build: plants_and_sensors
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: mongodb+srv://Matt:Matt1001@mattporfolio.9i2zi0r.mongodb.net/PlantsAndSensors?retryWrites=true&w=majority&appName=MattPorfolio
+      USERNAME: lunasegoviarodrigo@gmail.com
+      PASSWORD: gbqf zply uzom jryg
+    restart: always
