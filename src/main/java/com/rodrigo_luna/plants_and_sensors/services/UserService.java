@@ -171,13 +171,13 @@ public class UserService {
             if (user == null) {
                 throw new UsernameNotFoundException("Not found");
             }
-            if (!user.getPassword().equals(credentials.getOldPassword())) {
+            if (!user.getPassword().equals(passwordEncoder.encode(credentials.getOldPassword()))) {
                 throw new BadCredentialsException("Wrong Password");
             }
             if (credentials.getNewPassword() == null) {
                 throw new BadCredentialsException("Password can't be empty");
             }
-            user.setPassword(credentials.newPassword);
+            user.setPassword(passwordEncoder.encode(credentials.getNewPassword()));
             userRepository.save(user);
             response.setStatus("OK");
             response.setPack(user);
