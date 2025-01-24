@@ -170,6 +170,7 @@ public class UserService {
         try {
             UserModel user = userRepository.findByUsername(credentials.getUsername());
             if (user == null) {
+                errorCatch = "not finding user";
                 throw new UsernameNotFoundException("Not found");
             }
             if (!user.getPassword().equals(passwordEncoder.encode(credentials.getOldPassword()))) {
