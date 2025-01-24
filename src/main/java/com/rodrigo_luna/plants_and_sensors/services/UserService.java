@@ -184,6 +184,7 @@ public class UserService {
             response.setStatus("OK");
             response.setPack(user);
         } catch (UsernameNotFoundException | BadCredentialsException e) {
+            response.setPack(errorCatch);
             response.setStatus(errorCatch);
         }
         return response;
