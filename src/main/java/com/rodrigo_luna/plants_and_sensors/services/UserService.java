@@ -172,6 +172,7 @@ public class UserService {
                 throw new UsernameNotFoundException("Not found");
             }
             if (!user.getPassword().equals(passwordEncoder.encode(credentials.getOldPassword()))) {
+                System.out.println("Pass in system=" + user.getPassword() + ". Password codificado=" +  passwordEncoder.encode(credentials.getOldPassword()));
                 throw new BadCredentialsException("Wrong Password");
             }
             if (credentials.getNewPassword() == null) {
