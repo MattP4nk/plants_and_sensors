@@ -166,16 +166,13 @@ public class UserService {
     }
 
     public ResponseDTO changePassword(ChangePasswordDTO credentials) {
-        String errorCatch = "";
         try {
             UserModel user = userRepository.findByUsername(credentials.getUsername());
             if (user == null) {
-                errorCatch = "not finding user";
                 throw new UsernameNotFoundException("Not found");
             }
             if (!user.getPassword().equals(passwordEncoder.encode(credentials.getOldPassword()))) {
-                errorCatch = "Pass in system=" + user.getPassword() + ". Password codificado=" +  passwordEncoder.encode(credentials.getOldPassword());
-                throw new BadCredentialsException("Wrong Password");
+                throw new BadCredentialsException("Pass in system=" + user.getPassword() + ". Password codificado=" +  passwordEncoder.encode(credentials.getOldPassword()));
             }
             if (credentials.getNewPassword() == null) {
                 throw new BadCredentialsException("Password can't be empty");
@@ -185,8 +182,7 @@ public class UserService {
             response.setStatus("OK");
             response.setPack(user);
         } catch (UsernameNotFoundException | BadCredentialsException e) {
-            response.setPack(errorCatch);
-            response.setStatus(errorCatch);
+            response.setStatus(e.getMessage());
         }
         return response;
     }
