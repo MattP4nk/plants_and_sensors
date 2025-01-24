@@ -167,13 +167,10 @@ public class UserService {
 
     public ResponseDTO changePassword(ChangePasswordDTO credentials) {
         try {
+            authManager
+                    .authenticate(
+                            new UsernamePasswordAuthenticationToken(credentials.getUsername(), credentials.getOldPassword()));
             UserModel user = userRepository.findByUsername(credentials.getUsername());
-            if (user == null) {
-                throw new UsernameNotFoundException("Not found");
-            }
-            if (!user.getPassword().equals(passwordEncoder.encode(credentials.getOldPassword()))) {
-                throw new BadCredentialsException("Pass in system=" + user.getPassword() + ". Password codificado=" +  passwordEncoder.encode(credentials.getOldPassword()));
-            }
             if (credentials.getNewPassword() == null) {
                 throw new BadCredentialsException("Password can't be empty");
             }
